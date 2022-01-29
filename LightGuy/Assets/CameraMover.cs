@@ -7,9 +7,11 @@ public class CameraMover : MonoBehaviour
 
     private Vector3 initialPos;
     private Quaternion initialRot;
-    private float animationProgress = 0; // from 0 to 1 based on progress from animation to new quaternion
-
+    private float updateCallsSinceStart = 0;
+    private float totalUpdateCallAnimationLength = 30;
     public bool inShadowRealm = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,16 +21,29 @@ public class CameraMover : MonoBehaviour
 
     void Update()
     {
+      float animationProgress = updateCallsSinceStart / totalUpdateCallAnimationLength; // from 0 to 1 based on progress from animation to new quaternion
       if (Input.GetKeyDown(KeyCode.Space)) {
-        if (inShadowRealm) {
-          this.transform.position = this.initialPos;
-          this.transform.rotation = this.initialRot;
-        }
-        else {
-          this.transform.position = new Vector3(0, 20, 0);
-          this.transform.rotation = Quaternion.Euler(90, 0, 0);
-        }
+        StartCoroutine(this.Transition(1f, !this.inShadowRealm));
         this.inShadowRealm = !this.inShadowRealm;
+      }
+    }
+
+    IEnumerator Transition (float duration, bool playForwards) {
+      float elapsed = 0;
+      Quaternion topView = Quaternion.Euler(90, 0, 0);
+      Quaternion fromRot = playForwards ? this.initialRot : topView;
+      Quaternion toRot = playForwards ? topView : this.initialRot;
+
+      Vector3 topPos = new Vector3(0, 20, 0);
+      Vector3 fromPos = playForwards ? this.initialPos : topPos;
+      Vector3 toPos = playForwards ? topPos : this.initialPos;
+
+      while (elapsed < duration) {
+        float customProgress = Mathf.SmoothStep(0, 1, Mathf.SmoothStep(0, 1, Mathf.SmoothStep(0, 1, (elapsed / duration))));
+        this.transform.rotation = Quaternion.Lerp(fromRot, toRot, customProgress);
+        this.transform.position = Vector3.Lerp(fromPos, toPos, customProgress);
+        elapsed += Time.deltaTime;
+        yield return null;
       }
     }
 }
