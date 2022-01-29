@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2e499255627344fb6cd4210425fd1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inShadowRealm: 0
 --- !u!81 &147058706
 AudioListener:
   m_ObjectHideFlags: 0
@@ -644,6 +643,7 @@ GameObject:
   - component: {fileID: 1887753995}
   - component: {fileID: 1887753994}
   - component: {fileID: 1887753993}
+  - component: {fileID: 1887753997}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -727,6 +727,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1887753997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1887753992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67ff4381a009c024dafd6854c42aae63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 147058705}
 --- !u!1 &2009879228
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,7 +773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightSource: {fileID: 393267408}
-  parentPlayer: {fileID: 1887753992}
+  parentPlayer: {fileID: 1887753997}
   growthLimitFactor: 3
 --- !u!64 &2009879230
 MeshCollider:

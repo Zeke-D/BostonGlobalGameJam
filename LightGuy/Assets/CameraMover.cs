@@ -9,7 +9,7 @@ public class CameraMover : MonoBehaviour
     private Quaternion initialRot;
     private float updateCallsSinceStart = 0;
     private float totalUpdateCallAnimationLength = 30;
-    public bool inShadowRealm = false;
+    public static bool inShadowRealm = false;
 
 
     // Start is called before the first frame update
@@ -23,8 +23,8 @@ public class CameraMover : MonoBehaviour
     {
       float animationProgress = updateCallsSinceStart / totalUpdateCallAnimationLength; // from 0 to 1 based on progress from animation to new quaternion
       if (Input.GetKeyDown(KeyCode.Space)) {
-        StartCoroutine(this.Transition(1f, !this.inShadowRealm));
-        this.inShadowRealm = !this.inShadowRealm;
+        StartCoroutine(this.Transition(.3f, !CameraMover.inShadowRealm));
+        CameraMover.inShadowRealm = !CameraMover.inShadowRealm;
       }
     }
 
@@ -39,9 +39,8 @@ public class CameraMover : MonoBehaviour
       Vector3 toPos = playForwards ? topPos : this.initialPos;
 
       while (elapsed < duration) {
-        float customProgress = Mathf.SmoothStep(0, 1, Mathf.SmoothStep(0, 1, Mathf.SmoothStep(0, 1, (elapsed / duration))));
-        this.transform.rotation = Quaternion.Lerp(fromRot, toRot, customProgress);
-        this.transform.position = Vector3.Lerp(fromPos, toPos, customProgress);
+        this.transform.rotation = Quaternion.Lerp(fromRot, toRot, elapsed / duration);
+        this.transform.position = Vector3.Lerp(fromPos, toPos, elapsed / duration);
         elapsed += Time.deltaTime;
         yield return null;
       }
