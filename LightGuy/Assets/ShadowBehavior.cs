@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ShadowBehavior : MonoBehaviour
 {
-  public GameObject lightSource;
-  public Vector3 lightOriginalPosition;
+  public LightBehavior lightSource;
   public GameObject parentPlayer;
+  public float growthLimitFactor = 1;
 
   // Start is called before the first frame update
   void Start() { }
@@ -14,9 +14,9 @@ public class ShadowBehavior : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    float lightDiff = Vector3.Distance(this.lightOriginalPosition, this.lightSource.transform.position);
+    float lightDiff = Vector3.Distance(this.lightSource.getInitPos(), this.lightSource.transform.position);
     Debug.Log(lightDiff);
-    float zScaleAmt = (lightDiff) / 3;
+    float zScaleAmt = (lightDiff) / this.growthLimitFactor;
 
     Vector3 parentSize = this.parentPlayer.GetComponent<Collider>().bounds.size;
     Vector3 parentPos = this.parentPlayer.transform.position;

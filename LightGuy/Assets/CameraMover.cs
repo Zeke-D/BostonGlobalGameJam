@@ -7,6 +7,7 @@ public class CameraMover : MonoBehaviour
 
     private Vector3 initialPos;
     private Quaternion initialRot;
+    private float animationProgress = 0; // from 0 to 1 based on progress from animation to new quaternion
 
     public bool inShadowRealm = false;
     // Start is called before the first frame update
@@ -16,7 +17,6 @@ public class CameraMover : MonoBehaviour
       this.initialRot = this.transform.rotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
       if (Input.GetKeyDown(KeyCode.Space)) {
