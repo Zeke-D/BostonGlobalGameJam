@@ -19,6 +19,6 @@ public class LightBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
-      this.transform.position = new Vector3(this.transform.position.x, this.initialPos.y - (Mathf.Sin(Time.time) + 1) / 2, this.transform.position.z);
+      this.transform.position = new Vector3(this.transform.position.x, this.initialPos.y - 1, this.transform.position.z);
     }
 }
