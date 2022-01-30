@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "Custom/AlternativeLitGameObject"
+Shader "Custom/CelShader"
 {
     Properties
     {
@@ -54,7 +54,7 @@ Shader "Custom/AlternativeLitGameObject"
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                float3 lightDir = float3(0, _LightYPosition - (_SinTime.w + 1) * .5, -1);
+                float3 lightDir = float3(0, _LightYPosition, -1);
                 float mix_factor = dot(lightDir, i.normal);
 
                 // return float4(i.normal, 1);

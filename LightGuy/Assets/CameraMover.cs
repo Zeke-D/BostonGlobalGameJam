@@ -10,6 +10,7 @@ public class CameraMover : MonoBehaviour
     private float updateCallsSinceStart = 0;
     private float totalUpdateCallAnimationLength = 30;
     public static bool inShadowRealm = false;
+    public static bool lightAxisIsZ = true;
 
 
     // Start is called before the first frame update

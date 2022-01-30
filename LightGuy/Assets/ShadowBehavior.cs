@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ShadowBehavior : MonoBehaviour
 {
-  public LightBehavior lightSource;
-  public PlayerController parentPlayer;
+  public LightBehavior zAxisLightSource;
+  public LightBehavior xAxisLightSource;
+  public GameObject player;
   public float growthLimitFactor = 1;
   public Vector3 selfSize;
   private bool paused;
@@ -18,17 +19,38 @@ public class ShadowBehavior : MonoBehaviour
   void Update()
   {
     if (!paused) {
-      float lightDiff = Vector3.Distance(this.lightSource.getInitPos(), this.lightSource.transform.position);
-      float zScaleAmt = (lightDiff) / this.growthLimitFactor;
-
-      Debug.Log(zScaleAmt);
-
-      Vector3 parentSize = this.parentPlayer.GetComponent<Collider>().bounds.size;
-      Vector3 parentPos = this.parentPlayer.transform.position;
+      //float lightDiff = Vector3.Distance(this.zAxisLightSource.getInitPos(), this.zAxisLightSource.transform.position);
+      Vector3 parentSize = this.player.GetComponent<Collider>().bounds.size;
+      Vector3 parentPos = this.player.transform.position;
       this.selfSize = this.GetComponent<Collider>().bounds.size;
+      Vector3 playerPos = this.player.transform.position + new Vector3(parentSize.x / 2, 0, parentSize.z / 2);
 
-      this.transform.position = new Vector3(parentPos.x, .01f, parentPos.z + selfSize.z / 2);
-      this.transform.localScale = new Vector3(1, .01f, zScaleAmt);
+      Vector3 zLightPos = this.zAxisLightSource.transform.position;
+      float d = parentSize.y;
+      float f = zLightPos.y - d;
+      float e = parentPos.z - zLightPos.z;
+      float zShadowLength = d * e / f;
+      float zDir = zShadowLength > 0 ? 1 : -1;
+      Debug.Log(zShadowLength);
+
+      Vector3 xLightPos = this.xAxisLightSource.transform.position;
+      float x_d = parentSize.y;
+      float x_f = xLightPos.y - x_d;
+      float x_e = parentPos.x - xLightPos.x;
+      float xShadowLength = x_d * x_e / x_f;
+      float xDir = xShadowLength > 0 ? 1 : -1;
+
+      this.transform.position = new Vector3(
+        !CameraMover.lightAxisIsZ ? parentPos.x + xDir * (parentSize.x / 2) + (xShadowLength / 2) : parentPos.x,
+        .01f,
+        CameraMover.lightAxisIsZ ? parentPos.z + zDir * (parentSize.z / 2) + (zShadowLength / 2) : parentPos.z
+      );
+
+      this.transform.localScale = new Vector3(
+        !CameraMover.lightAxisIsZ ? xShadowLength : 1,
+        .01f,
+        CameraMover.lightAxisIsZ ? zShadowLength : 1
+      );
     }
   }
 

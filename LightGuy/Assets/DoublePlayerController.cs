@@ -17,10 +17,10 @@ public class DoublePlayerController : MonoBehaviour
     private float playerSpeed = 20.0f;
 
     public static bool sunk = false;
-    private float sinkSpeed = 2.0f;
-    private float floorY = 0.3f;
+    private float sinkSpeed = 4f;
+    private float floorY = 0.01f;
     private float raiseHeight = .5f;
-    private float lowerHeight = .3f;
+    private float lowerHeight = -.3f;
 
     Vector3 preSinkShadow;
 
@@ -32,12 +32,21 @@ public class DoublePlayerController : MonoBehaviour
     {
         // sink player
         if (Input.GetKeyDown(KeyCode.LeftShift)) sunk = !sunk;
+        else if (Input.GetKeyDown(KeyCode.L)) {
+          CameraMover.lightAxisIsZ = !CameraMover.lightAxisIsZ;
+        }
 
 
-        Vector3 target = shadow.transform.position + new Vector3(0, .01f, 0);
+
+        // WARNING WILL ROBINSON: this .5 is hardcoded from the cube width
+        Vector3 target = shadow.transform.position - new Vector3(
+          !CameraMover.lightAxisIsZ ? -shadow.selfSize.x / 2 - .5f : 0,
+          0,
+          CameraMover.lightAxisIsZ ? shadow.selfSize.z / 2 + .5f : 0);
+
         // Sets the y for sinking
         if (sunk)
-            target.y -= lowerHeight;
+            target.y = lowerHeight;
         else
             target.y = raiseHeight;
 
@@ -66,8 +75,6 @@ public class DoublePlayerController : MonoBehaviour
 
             body.GetComponent<Rigidbody>().AddForce(m_Input * Time.deltaTime * playerSpeed);
             shadow.transform.position = new Vector3( body.transform.position.x, floorY, body.transform.position.z);
-
-
 
         }
         else
