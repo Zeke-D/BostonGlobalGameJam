@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CameraMover : MonoBehaviour
 {
-
+    public int y = 20;
+    public int z = 0;
     private Vector3 initialPos;
     private Quaternion initialRot;
     private float updateCallsSinceStart = 0;
@@ -34,7 +35,7 @@ public class CameraMover : MonoBehaviour
       Quaternion fromRot = playForwards ? this.initialRot : topView;
       Quaternion toRot = playForwards ? topView : this.initialRot;
 
-      Vector3 topPos = new Vector3(0, 20, 0);
+      Vector3 topPos = new Vector3(0, y, z);
       Vector3 fromPos = playForwards ? this.initialPos : topPos;
       Vector3 toPos = playForwards ? topPos : this.initialPos;
 

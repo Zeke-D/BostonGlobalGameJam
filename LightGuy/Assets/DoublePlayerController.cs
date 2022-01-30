@@ -6,11 +6,10 @@ public class DoublePlayerController : MonoBehaviour
 {
     [SerializeField]
     private GameObject body;
-
     [SerializeField]
-    private ShadowBehavior shadow;
+    private GameObject shadow;
 
-
+    
 
     private Vector3 playerVelocity;
     [SerializeField]
@@ -31,20 +30,22 @@ public class DoublePlayerController : MonoBehaviour
     void Update()
     {
         // sink player
-        if (Input.GetKeyDown(KeyCode.LeftShift)) sunk = !sunk;
+        if (Input.GetKeyDown("z"))
 
+            sunk = !sunk;
 
-        Vector3 target = shadow.transform.position + new Vector3(0, .01f, 0);
+            
+        Vector3 target = shadow.transform.position - new Vector3(0, 0, shadow.GetComponent<ShadowBehavior>().selfSize.z / 2);
         // Sets the y for sinking
         if (sunk)
             target.y -= lowerHeight;
         else
-            target.y = raiseHeight;
+            target.y += raiseHeight;
 
         // could be a coroutine tbh idk
         if (Mathf.Abs((target - body.transform.position).y) > .05f)
         {
-            this.shadow.pause();
+            shadow.GetComponent<ShadowBehavior>().pause(true);
             // Corrects y value to make sure no float and sink correctly
             body.GetComponent<Rigidbody>().isKinematic = true;
             body.GetComponent<BoxCollider>().enabled = false;
@@ -57,7 +58,7 @@ public class DoublePlayerController : MonoBehaviour
         }
         else if(!sunk)
         {
-            this.shadow.play();
+            shadow.GetComponent<ShadowBehavior>().pause(false);
             body.GetComponent<Rigidbody>().isKinematic = false;
             body.GetComponent<BoxCollider>().enabled = true;
 
@@ -67,8 +68,8 @@ public class DoublePlayerController : MonoBehaviour
             body.GetComponent<Rigidbody>().AddForce(m_Input * Time.deltaTime * playerSpeed);
             shadow.transform.position = new Vector3( body.transform.position.x, floorY, body.transform.position.z);
 
-
-
+             
+            
         }
         else
         {
